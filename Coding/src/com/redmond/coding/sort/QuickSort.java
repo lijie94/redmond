@@ -9,58 +9,71 @@ public class QuickSort implements Sort {
 	public static Random random = new Random(System.currentTimeMillis());
 
 	public static void sort(int[] values, int start, int end) {
-		int len = end - start + 1;
-		if (len <= 1) {
+		if (start == end) {
 			return;
 		}
+		long p = partition(values, start, end);
+		int equalPartitionStart = (int)(p >> 32);
+		int bigPartitionPointer = (int)(p & 0xffffffff); 
+		if (equalPartitionStart-1 > start) {
+			sort(values, start, equalPartitionStart-1);
+		}
+		if (bigPartitionPointer < end) {
+			sort(values, bigPartitionPointer, end);
+		}
+	}
+	
+	
+	public static long partition(int[] values, int start, int end) {
+		assert(end > start);
+		int len = end - start + 1;
 
-		// 1. find a pivot value ans swap it with the first one
+		// 1. find a pivot value ans swap it with the last one
 		int pivotIndex = random.nextInt(len) + start;
 		int pivot = values[pivotIndex];
-		if (pivotIndex != start) {
-			values[pivotIndex] = values[start];
-			values[start] = pivot;
-		}
-		int bigPointer = end;
-		int pointer = start + 1;
-
-		// 2. split the array, when we start out, [start, pointer - 1] is the part
-		// less or equal than pivot, [pointer, end] is the part bigger than
-		// pivot
-		while (true) {
-			if (values[pointer] > pivot) {
-				do {
-					if (pointer == bigPointer) {
-						bigPointer --;
-						break;
-					}
-					
-					int tmp = values[pointer];
-					values[pointer] = values[bigPointer];
-					values[bigPointer] = tmp;
-					bigPointer--;
-				} while (values[pointer] > pivot);
-			} else {
-				pointer++;
-			}			
-			if (pointer > bigPointer) {
-				break;
-			}
-		}
-		if (pointer > end) {
-			// swap the first one and the last one
-			values[start] = values[end];
+		if (pivotIndex != end) {
+			values[pivotIndex] = values[end];
 			values[end] = pivot;
-			pointer--;
+		}
+		int bigPartitionPointer = start;
+		int equalPartitionStart = end;
+		int j = start;
+
+		// 2. split the array
+		while (j<equalPartitionStart) {
+			if (values[j] < pivot) {
+				int tmp = values[bigPartitionPointer];
+				values[bigPartitionPointer] = values[j];
+				values[j] = tmp;
+				bigPartitionPointer++;
+			} else if (values[j] == pivot) {
+				equalPartitionStart --;
+				values[j] = values[equalPartitionStart];
+				values[equalPartitionStart] = pivot;
+			}
+			j++;
 		}
 
-		// 3. sort 2 splitted array
-		if (pointer - 1 > start) {
-			sort(values, start, pointer - 1);
+		// 3. move big partition to the end
+		if (equalPartitionStart > bigPartitionPointer) {
+			int lenOfEqualPartition = end - equalPartitionStart + 1;
+			int lenOfBigPartition = equalPartitionStart - bigPartitionPointer;
+			int needToMove = Math.min(lenOfEqualPartition, lenOfBigPartition);
+			for (int i = 0;i<needToMove;i++) {
+				int b = bigPartitionPointer + i;
+				int e = end - i;
+				values[e] = values[b];
+				values[b] = pivot;
+			}
+			equalPartitionStart = bigPartitionPointer;
+			bigPartitionPointer = end - lenOfBigPartition + 1;
 		}
-		if (pointer < end) {
-			sort(values, pointer, end);
-		}
+		
+//		values[end] = values[bigPartitionPointer];
+//		values[bigPartitionPointer] = pivot;
+		
+		long res = (long)bigPartitionPointer | (((long)equalPartitionStart) << 32);
+		return res;
 	}
 
 	public void sort(int[] values) {
@@ -93,6 +106,15 @@ public class QuickSort implements Sort {
 		{
 			int[] test = { 1, 300, 4, 6, 7, 100, 2, 10, 5, 10102, 0, 504, 80,
 					34, 28, 50000 };
+			sort.sort(test);
+			System.out.println("res = " + GeneralUtils.toString(test));
+		}
+		
+		{
+			int[] test = new int[10000];
+			for (int i = 0;i<test.length;i++) {
+				test[i] = 100;
+			}
 			sort.sort(test);
 			System.out.println("res = " + GeneralUtils.toString(test));
 		}

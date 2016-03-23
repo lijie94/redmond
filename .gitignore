@@ -1,0 +1,64 @@
+.metadata/
+/bin
+/web/WEB-INF/lib/
+/web/WEB-INF/classes/
+/apiweb/WEB-INF/lib/
+/apiweb/WEB-INF/classes/
+/web/router/files/
+/conf/*.config
+src/log4j.properties
+
+# Numerous always-ignore extensions
+*.bak
+*.diff
+*.err
+*.orig
+*.log
+*.rej
+*.swo
+*.swp
+*.vi
+*.class
+*.arff
+*.csv
+*.dat
+
+# OS or Editor folders
+.DS_Store
+._*
+Thumbs.db
+.cache
+.project
+.settings
+.tmproj
+nbproject
+*.sublime-project
+*.sublime-workspace
+
+# Dreamweaver added files
+_notes
+dwsync.xml
+
+# Komodo
+*.komodoproject
+.komodotools
+
+# Espresso
+*.esproj
+*.espressostorage
+
+# Rubinius
+*.rbc
+
+# Folders to ignore
+.hg
+.svn
+.CVS
+.idea
+.sass-cache
+
+#build related
+/apache-tomcat
+/apache-tomcat.tar.gz
+/web/WEB-INF/src/
+/build

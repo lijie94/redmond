@@ -58,7 +58,7 @@ public class HeapSort implements Sort{
 			values[pointer] = tmp;
 			
 			pointer --;
-			if (pointer == 0) {
+			if (pointer <= 0) {
 				break;
 			}
 			siftDown(values, 0, pointer);

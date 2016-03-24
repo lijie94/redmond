@@ -50,8 +50,8 @@ public class SortUtils {
 		int m = 100000;
 		int r = 100;
 
-		Sort[] sorts = new Sort[] { new BubbleSort(), new MergeSort(), new HeapSort(), new QuickSort() };
-		long[] millis = new long[] { 0, 0, 0, 0 };
+		Sort[] sorts = new Sort[] { new BubbleSort(), new MergeSort(), new HeapSort(), new QuickSort(), new BucketSort(m/100, new HeapSort()) };
+		long[] millis = new long[sorts.length];
 
 		for (int i = 0; i < c; i++) {
 			int[] array = generateRandomArray(l, m);

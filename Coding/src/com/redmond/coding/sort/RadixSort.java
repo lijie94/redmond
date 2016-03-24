@@ -5,70 +5,64 @@ import java.util.List;
 
 import com.redmond.coding.GeneralUtils;
 
-public class BucketSort implements Sort{
+public class RadixSort implements Sort{
 	
-	public int bucketSize = 100;
-	public Sort sort = new BubbleSort();
-	
-	public BucketSort() {
+	public RadixSort() {
 		
 	}
 	
-	public BucketSort(int bucketSize) {
-		super();
-		this.bucketSize = bucketSize;
+	public int getMax(int[] values) {
+		int max = 0;
+		for (int value : values) {
+			if (value > max) {
+				max = value;
+			}
+		}
+		
+		return max;
 	}
 	
-	public BucketSort(int bucketSize, Sort sort) {
-		super();
-		this.bucketSize = bucketSize;
-		this.sort = sort;
-	}
-
-	public void sort(int[] values) {
-		
+	public void sortByDigit(int bit, int[] values) {
+		int denominator = 1;
+		for (int i = 0;i<bit;i++) {
+			denominator *= 10;
+		}
 		List<List<Integer>> buckets = new ArrayList<List<Integer>>();
+		for (int i = 0;i<10;i++) {
+			buckets.add(new ArrayList<Integer>());
+		}
 		
 		for (int value : values) {
-			int bucket = value / bucketSize;
-			if (buckets.size() <= bucket) {
-				for (int size = buckets.size();size <= bucket;size++) {
-					buckets.add(null);
-				}
-			}
+			int bucket = value / denominator;
+			bucket = bucket % 10; 
 			List<Integer> mybuckets = buckets.get(bucket);
-			if (mybuckets == null) {
-				mybuckets = new ArrayList<Integer>();
-				buckets.set(bucket, mybuckets);
-			}
 			mybuckets.add(value);
 		}
 		
 		int i = 0;
 		for (List<Integer> bucket : buckets) {
-			if (bucket == null) {
-				continue;
+			for (int j = 0;j<bucket.size();j++) {
+				values[i++] = bucket.get(j);
 			}
-			
-			if (bucket.size() == 1) {
-				values[i++] = bucket.get(0);
-			} else {
-				int[] myvalues = new int[bucket.size()];
-				for (int j = 0;j<bucket.size();j++) {
-					myvalues[j] = bucket.get(j);
-				}
-				
-				sort.sort(myvalues);
-				for (int j = 0;j<bucket.size();j++) {
-					values[i++] = myvalues[j];
-				}
-			}
+		}
+	}
+	
+	public void sort(int[] values) {
+		int max = getMax(values);
+		int maxBit = 0;
+		while (max > 0) {
+			max /= 10;
+			maxBit ++;
+		}
+		
+		for (int bit = 0;bit<=maxBit;bit++) {
+			sortByDigit(bit, values);
 		}
 	}
 
 	public static void main(String[] args) {
 		
-		Sort sort = new BucketSort();
+		Sort sort = new RadixSort();
 
 		{
 			int[] test = { 4, 6, 2, 10, 5 };
@@ -106,4 +100,5 @@ public class BucketSort implements Sort{
 		}
 
 	}
+
 }

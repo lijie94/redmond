@@ -50,7 +50,7 @@ public class SortUtils {
 		int m = 100000;
 		int r = 100;
 
-		Sort[] sorts = new Sort[] { new BubbleSort(), new MergeSort(), new HeapSort(), new QuickSort(), new BucketSort(m/100, new HeapSort()) };
+		Sort[] sorts = new Sort[] { new BubbleSort(), new MergeSort(), new HeapSort(), new QuickSort(), new BucketSort(m/100, new HeapSort()), new RadixSort() };
 		long[] millis = new long[sorts.length];
 
 		for (int i = 0; i < c; i++) {

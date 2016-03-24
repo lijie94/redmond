@@ -18,6 +18,10 @@ public class QuickSort implements Sort {
 		if (equalPartitionStart-1 > start) {
 			sort(values, start, equalPartitionStart-1);
 		}
+		if (bigPartitionPointer == start) {
+			System.out.println("wrong, start = " +start + ", end = " + end + ", bigPartitionPointer = " + bigPartitionPointer + ", equalPartitionStart= " + equalPartitionStart + ", values = " + GeneralUtils.toString(values) + "");
+			throw new IllegalStateException("");
+		}
 		if (bigPartitionPointer < end) {
 			sort(values, bigPartitionPointer, end);
 		}
@@ -28,7 +32,7 @@ public class QuickSort implements Sort {
 		assert(end > start);
 		int len = end - start + 1;
 
-		// 1. find a pivot value ans swap it with the last one
+		// 1. find a pivot value and swap it with the last one
 		int pivotIndex = random.nextInt(len) + start;
 		int pivot = values[pivotIndex];
 		if (pivotIndex != end) {
@@ -46,12 +50,14 @@ public class QuickSort implements Sort {
 				values[bigPartitionPointer] = values[j];
 				values[j] = tmp;
 				bigPartitionPointer++;
+				j++;
 			} else if (values[j] == pivot) {
 				equalPartitionStart --;
 				values[j] = values[equalPartitionStart];
 				values[equalPartitionStart] = pivot;
+			} else {
+				j++;
 			}
-			j++;
 		}
 
 		// 3. move big partition to the end
@@ -67,6 +73,8 @@ public class QuickSort implements Sort {
 			}
 			equalPartitionStart = bigPartitionPointer;
 			bigPartitionPointer = end - lenOfBigPartition + 1;
+		} else if (equalPartitionStart == bigPartitionPointer) {
+			bigPartitionPointer = end + 1;
 		}
 		
 //		values[end] = values[bigPartitionPointer];

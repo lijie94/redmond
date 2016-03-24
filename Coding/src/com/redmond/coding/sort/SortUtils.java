@@ -45,7 +45,7 @@ public class SortUtils {
 
 	public static void main(String arg[]) {
 
-		int c = 1;
+		int c = 10;
 		int l = 10000;
 		int m = 100000;
 		int r = 100;

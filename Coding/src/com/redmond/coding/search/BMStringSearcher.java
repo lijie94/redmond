@@ -43,6 +43,7 @@ public class BMStringSearcher implements Searcher{
     public static int[] getGoodSuffixLLookupTable(char[] needle) {
     	int[] table = new int[needle.length];
     	
+    	
     	return table;
     }
     
